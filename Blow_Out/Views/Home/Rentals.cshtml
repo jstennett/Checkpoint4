@@ -1,0 +1,29 @@
+﻿@using Blow_Out.Models
+@model IEnumerable<Blow_Out.Models.Instrument>
+
+<h2>Rentals</h2>
+
+@for (int i = 0; i < Model.Count(); i++)
+{
+    if (i % 3 == 0)
+    {
+    <div class="card-deck buffer">
+        @do
+        {
+            <div class="card">
+                <a href="@Url.Action("Instrument", "Home", new { id = i })">
+                    <img class="card-img-top" src=@Model.ElementAt(i).image style="height: 200px;" alt="Card image cap">
+
+                    <div class="card-body">
+                        <p class="card-text">@Model.ElementAt(i).name</p>
+                    </div>
+                </a>
+            </div>
+            i++;
+        }
+        while (i % 3 != 0 && i < Model.Count());
+    </div>
+        i--;
+    }
+}
+
