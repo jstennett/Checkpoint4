@@ -14,7 +14,7 @@ namespace Blow_Out.Controllers
 
         public ActionResult Index()
         {
-
+            //Bagawwwwwwk!
             return View();
         }
 
