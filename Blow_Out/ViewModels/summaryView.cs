@@ -6,9 +6,9 @@ using System.Web;
 
 namespace Blow_Out.ViewModels
 {
-    public class InstrumentView
+    public class SummaryView
     {
-        public List<Instrument> instruments = new List<Instrument>();
-        public int instrumentId { get; set; }
+        public Instrument Instrument { get; set; }
+        public Customer Customer { get; set; }
     }
 }

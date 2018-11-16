@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace Blow_Out.Models
 {
+    [Table("Instrument")]
     public class Instrument
     {
-        public string name { get; set; }
-        public float priceNew { get; set; }
-        public float priceOld { get; set; }
-        public string image { get; set; }
+        public int InstrumentID { get; set; }
+        public string Description { get; set; }
+        public string Type { get; set; }
+        public int Price { get; set; }
+        public string Image { get; set; }
+        public int? CustomerID { get; set; }
     }
 }

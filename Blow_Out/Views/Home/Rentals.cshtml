@@ -1,5 +1,4 @@
-﻿@using Blow_Out.Models
-@model IEnumerable<Blow_Out.Models.Instrument>
+﻿@model IEnumerable<Blow_Out.Models.Instrument>
 
 <h2>Rentals</h2>
 
@@ -11,11 +10,12 @@
         @do
         {
             <div class="card">
-                <a href="@Url.Action("Instrument", "Home", new { id = i })">
-                    <img class="card-img-top" src=@Model.ElementAt(i).image style="height: 200px;" alt="Card image cap">
+                <a href="@Url.Action("Instrument", "Home", new { instrumentID = Model.ElementAt(i).InstrumentID })">
+                    <img class="card-img-top" src=@Model.ElementAt(i).Image style="height: 200px;" alt="Card image cap">
 
                     <div class="card-body">
-                        <p class="card-text">@Model.ElementAt(i).name</p>
+                        <p class="card-text">@Model.ElementAt(i).Description</p>
+                        <p class="card-text">@Model.ElementAt(i).Type</p>
                     </div>
                 </a>
             </div>

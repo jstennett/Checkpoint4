@@ -1,55 +1,22 @@
-﻿@model Blow_Out.ViewModels.InstrumentView
+﻿@model Blow_Out.Models.Instrument
 
-<div class="row justify-content-center">
+<div class="row justify-content-center" style="margin-top:10px;">
     <div class="col-8">
-        <div class="card buffer" style="padding: 10px;">
+        <div class="card">
             <div class="row justify-content-center">
-                <div class="col-6">
-                    <div class="card">
-                        <img class="card-img-top" src=@Model.instruments[Model.instrumentId].image style="height: 200px;" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">@Model.instruments[Model.instrumentId].name</p>
-                        </div>
-                    </div>
-                </div>
+                <h1 class="card-header">@Model.Description</h1>
             </div>
-            <div class="row buffer">
-                <div class="dropdown" style="margin-left:10px; padding-right:10px;">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Condition
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" id="New">New</a>
-                        <a class="dropdown-item" id="Used">Used</a>
-                    </div>
-                </div>
-                <div class="alert alert-primary d-none bottomBuffer" id="NewPrice" role="alert">
-                    New: $@Model.instruments[Model.instrumentId].priceNew
-                </div>
-                <div class="alert alert-primary d-none bottomBuffer" id="UsedPrice" role="alert">
-                    Used: $@Model.instruments[Model.instrumentId].priceOld
-                </div>
-            </div>
-            <div class="row" style="padding-top:15px;">
-                <div class="alrt alert-info" style="margin-left:10px; margin-right:10px;">
-                    Once the 18 months has been achieved, the client owns the instrument. If they return it at any time before 3 months there will be a $200 re-stocking fee. If they return it after 3 months they forfeit any equity in the instrument.
+            <img class="card-img" src="@Model.Image" style="height:200px;" />
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Condition:</strong> @Model.Type</li>
+                <li class="list-group-item"><strong>Cost/Month:</strong> $@Model.Price</li>
+                <li class="list-group-item"><strong>Total After 18 months:</strong> $@(Model.Price * 18)</li>
+            </ul>
+            <div class="card-body">
+                <div class="row justify-content-center">
+                        <a type="button" href="@Url.Action("RentInstrument", "Home", new { instrumentID = Model.InstrumentID })" class="btn btn-primary btn-lg">Rent</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-    <script>
-        $(document).ready(function () {
-            $('#New').click(function () {
-                $('#NewPrice').removeClass('d-none')
-                $('#UsedPrice').addClass('d-none')
-
-            })
-
-            $('#Used').click(function () {
-                $('#UsedPrice').removeClass('d-none')
-                $('#NewPrice').addClass('d-none')
-            })
-        });
-    </script>

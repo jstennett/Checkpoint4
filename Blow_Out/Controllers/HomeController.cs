@@ -1,20 +1,19 @@
-﻿using Blow_Out.Models;
+﻿using Blow_Out.DAL;
+using Blow_Out.Models;
 using Blow_Out.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Blow_Out.Controllers
 {
     public class HomeController : Controller
     {
-        public static List<Instrument> instruments = new List<Instrument>();
+        private BlowOutContext db = new BlowOutContext();
 
         public ActionResult Index()
         {
-            //Bagawwwwwwk!
+
             return View();
         }
 
@@ -34,24 +33,37 @@ namespace Blow_Out.Controllers
 
         public ActionResult Rentals()
         {
-            if (instruments.Count < 1)
-            {
-                instruments.Add(new Instrument { name = "Trumpet", priceNew = 55, priceOld = 25, image = "../../Content/images/Trumpet.png" });
-                instruments.Add(new Instrument { name = "Trombone", priceNew = 60, priceOld = 35, image = "../../Content/images/Trombone.jpg" });
-                instruments.Add(new Instrument { name = "Tuba", priceNew = 70, priceOld = 50, image = "../../Content/images/Tuba.jpg" });
-                instruments.Add(new Instrument { name = "Flute", priceNew = 40, priceOld = 25, image = "../../Content/images/Flute.jpg" });
-                instruments.Add(new Instrument { name = "Clarinet", priceNew = 35, priceOld = 27, image = "../../Content/images/Clarinet.jpg" });
-                instruments.Add(new Instrument { name = "Saxaphone", priceNew = 42, priceOld = 30, image = "../../Content/images/Saxaphone.jpg" });
-            }
 
-            return View(instruments);
+            return View(db.Instruments.ToList());
         }
 
-        public ActionResult Instrument(int id)
+        public ActionResult Instrument(int instrumentID)
         {
-            InstrumentView instrumentView = new InstrumentView() { instrumentId = id, instruments = instruments};
 
-            return View("Instrument", instrumentView);
+            return View("Instrument", db.Instruments.Find(instrumentID));
+        }
+
+        public ActionResult RentInstrument(int instrumentID)
+        {
+
+            return View("AddCustomer", instrumentID);
+        }
+        
+        [HttpPost]
+        public ActionResult AddCustomer(Customer customer, int instrumentID)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Customers.Add(customer);
+                db.Instruments.First(x => x.InstrumentID == instrumentID).CustomerID = customer.CustomerID;
+                db.SaveChanges();
+                SummaryView summaryView = new SummaryView();
+                summaryView.Instrument = db.Instruments.Find(instrumentID);
+                summaryView.Customer = db.Customers.Find(customer.CustomerID);
+                return View("Summary", summaryView);
+            }
+
+            return View(instrumentID);
         }
     }
 }
