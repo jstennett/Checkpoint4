@@ -1,0 +1,67 @@
+﻿@model Blow_Out.ViewModels.UpdateDataView
+@using Blow_Out.Models
+
+@{
+    ViewBag.Title = "UpdateData";
+}
+
+@foreach (Customer item in Model.customers)
+{
+<div class="card" style="margin-top:5px;">
+    <div class="card-body">
+        <h3 class="card-text">Customer Information</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Zipcode</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.Email</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Zipcode</td>
+                </tr>
+            </tbody>
+        </table>
+        <h5 class="card-text">Instruments Ordered by Customer</h5>
+        @foreach (Instrument item2 in Model.instruments)
+        {
+            if (item2.CustomerID == item.CustomerID)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order Number</th>
+                            <th>Instrument ID</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@item.CustomerID</td>
+                            <th>@item2.InstrumentID</th>
+                            <th>@item2.Description</th>
+                            <th>@item2.Type</th>
+                            <th>@item2.Price</th>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        }
+                    <a type="button" href="@Url.Action("DeleteCustomer", "Home", new { customerID = item.CustomerID })"
+                       class="btn btn-primary btn-lg">Delete Customer</a>
+                    <a type="button" href="@Url.Action("EditCustomer", "Home", new { customerID = item.CustomerID })"
+                       class="btn btn-primary btn-lg">Update Customer</a>
+    </div>
+</div>
+}
+

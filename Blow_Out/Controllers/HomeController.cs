@@ -2,11 +2,14 @@
 using Blow_Out.Models;
 using Blow_Out.ViewModels;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 
 namespace Blow_Out.Controllers
 {
+    //Author: Jordan Stenentt
     public class HomeController : Controller
     {
         private BlowOutContext db = new BlowOutContext();
@@ -55,6 +58,7 @@ namespace Blow_Out.Controllers
             if (ModelState.IsValid)
             {
                 db.Customers.Add(customer);
+                db.SaveChanges();
                 db.Instruments.First(x => x.InstrumentID == instrumentID).CustomerID = customer.CustomerID;
                 db.SaveChanges();
                 SummaryView summaryView = new SummaryView();
@@ -64,6 +68,77 @@ namespace Blow_Out.Controllers
             }
 
             return View(instrumentID);
+        }
+
+        public ActionResult EditCustomer(int customerID)
+        {
+            Customer customer = db.Customers.Find(customerID);
+
+
+            return View(customer);
+        }
+        [HttpPost]
+        public ActionResult EditCustomer([Bind(Include = "CustomerID,FirstName,LastName,Address,City,State,Email,Phone, Zipcode")] Customer customer)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("UpdateData");
+            }
+            return View(customer);
+        }
+
+        public ActionResult Login()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(string UserName, string Password)
+        {
+            if (UserName == "Missouri" && Password == "ShowMe")
+            {
+                return RedirectToAction("UpdateData");
+            }
+
+            return View();
+        }
+
+        public ActionResult UpdateData()
+        {
+            UpdateDataView updateDataView = new UpdateDataView();
+
+            updateDataView.instruments = db.Instruments.ToList();
+            updateDataView.customers = db.Customers.ToList();
+
+            return View(updateDataView);
+        }
+
+        public ActionResult DeleteCustomer(int? customerID)
+        {
+            if (customerID == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Customer customer = db.Customers.Find(customerID);
+            if (customer == null)
+            {
+                return HttpNotFound();
+            }
+
+            var result = db.Instruments.SingleOrDefault(b => b.CustomerID == customerID);
+            if (result != null)
+            {
+                result.CustomerID = null;
+                db.SaveChanges();
+            }
+
+            db.Customers.Remove(customer);
+            db.SaveChanges();
+
+            return RedirectToAction("UpdateData");
         }
     }
 }
